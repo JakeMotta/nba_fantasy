@@ -12,8 +12,10 @@ export default function PlayerCard({player, type, onPress}) {
       <Image source={{uri: `https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${get(player, "personId", "")}.png`}} style={styles.playerImage} />
       <Text style={styles.title} numberOfLines={2} lineBreakMode="tail">{get(player, "firstName", "").concat(" ").concat(get(player, "lastName", ""))}</Text>
       <Text style={styles.subtitle}>{get(player, "teamSitesOnly.posFull", "")}</Text>
-      <Text style={styles.subtitle}>Create Team</Text>
-      <Text style={styles.subtitle}>Create Team</Text>
+
+      {/* These WERE NOT clear in the JSON data, and there was nothing indicating where to get it in the JSON or instructions. */}
+      <Text style={styles.subtitle}>Team City</Text>
+      <Text style={styles.subtitle}>Team Name</Text>
     </View>
   );
 }

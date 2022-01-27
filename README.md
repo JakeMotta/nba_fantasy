@@ -1,11 +1,29 @@
-# Sample Snack app
+# NBA Fantasy App
 
-Open the `App.js` file to start writing some code. You can preview the changes directly on your phone or tablet by scanning the **QR code** or use the iOS or Android emulators. When you're done, click **Save** and share the link!
+## How To Run
+1. Install node modules by running 'npm install'
+2. Run the 'npm run start'
+3. Follow the commands given from the terminal on how to start the desired emulator
 
-When you're ready to see everything that Expo provides (or if you want to use your own editor) you can **Download** your project and use it with [expo-cli](https://docs.expo.io/get-started/installation).
+## Author
+Jake Motta
 
-All projects created in Snack are publicly available, so you can easily share the link to this project via link, or embed it on a web page with the `<>` button.
+## Video of output
+https://gyazo.com/508089b668fb6977120c9dfbd370c6ed
 
-If you're having problems, you can tweet to us [@expo](https://twitter.com/expo) or ask in our [forums](https://forums.expo.io/c/snack).
+## Feedback
+This project upset me, mainly due to the EXTREMELY vague / missing requirements, and the assumption that applicants have a solid understanding of basketball. 
 
-Snack is Open Source. You can find the code on the [GitHub repo](https://github.com/expo/snack).
+I don't mind the complexity of the project, that makes sense (though it was a bit much for a pre-interview test), but it genuinely felt like no one has at EA has actually read the requirements, and then tried to build the corresponding app.
+
+As an applicant, I like to try and follow ALL the requirements as they're stated, which makes it very awkward when the requirements are either contradicting or non-existent. 
+
+## (some) Vague / Missing Requirments
+- Minimum team size for creating a team
+- What positions NEED to be filled in order to create a team
+- 'Single Screen' application that immediately asks for at least 2 screens
+- JSON data is very confusing to people who are not versed w/ basketball
+- JSON data doesn't contain player's city name (or anything that looks like it, unless 'standard' is a team I'm unaware of)
+- JSON data doesn't container player's team name, only a team ID with nothing to actually match it to
+- Should 'created teams' be clickable post-creation
+- Any 'desired' image or mockup would have been appreciated, as I have no idea what you wanted this to look / feel like, so I had to make a mockup soley on the project requirements: https://gyazo.com/6ec9a5f74cc93b6ec85ed6d4759b4155.

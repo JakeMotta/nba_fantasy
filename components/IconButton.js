@@ -4,9 +4,9 @@ import { FontAwesome } from '@expo/vector-icons';
 
 let disabledText = "rgba(255,255,255, .5)";
 
-export default function IconButton({icon, text, onPress, buttonStyle, disabled}) {
+export default function IconButton({icon, text, onPress, buttonStyle, disabled, direction}) {
   return (
-    <TouchableOpacity disabled={disabled} style={[styles.buttonWithIcon, buttonStyle, disabled && styles.disabledWrapper]} onPress={onPress}>
+    <TouchableOpacity disabled={disabled} style={[styles.buttonWithIcon, {flexDirection: direction === "vertical" ? "row" : "column"}, buttonStyle, disabled && styles.disabledWrapper]} onPress={onPress}>
       <FontAwesome name={icon} size={24} color={disabled ? disabledText : "#6200ee"} style={styles.icon} />
       <Text style={[styles.text, disabled && styles.disabledText]}>{text}</Text>
     </TouchableOpacity>
@@ -15,7 +15,7 @@ export default function IconButton({icon, text, onPress, buttonStyle, disabled})
 
 const styles = StyleSheet.create({
   buttonWithIcon: {
-    flexDirection: "row",
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 15,

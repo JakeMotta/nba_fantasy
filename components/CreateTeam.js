@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, FlatList, ScrollView } from 'react-native';
 import { TextInput } from "react-native-paper";
 import SectionTitle from "./SectionTitle";
@@ -7,7 +7,11 @@ import { FontAwesome } from '@expo/vector-icons';
 import PlayerCard from "./PlayerCard";
 import IconButton from "./IconButton";
 
-export default function CreateTeam({myRoster, filteredPlayers, teamCity, teamName, gamePositions, changeText, setFilter, addPlayerToRoster, removePlayerFromRoster, saveTeam}) {
+export default function CreateTeam({myRoster, filteredPlayers, gamePositions, setFilter, addPlayerToRoster, removePlayerFromRoster, saveTeam}) {
+  
+  const [teamCity, setTeamCity] = useState("");
+  const [teamName, setTeamName] = useState("");
+
   return (
     <View style={styles.container}>
       <SectionTitle title={"Create Team"} />
@@ -17,13 +21,13 @@ export default function CreateTeam({myRoster, filteredPlayers, teamCity, teamNam
         <TextInput 
           label={"Team City"}
           value={teamCity}
-          onChangeText={value => changeText(value, "teamCity")}
+          onChangeText={value => setTeamCity(value)}
           style={styles.inputStyle}
         />
         <TextInput 
           label={"Team Name"}
           value={teamName}
-          onChangeText={value => changeText(value, "teamName")}
+          onChangeText={value => setTeamName(value)}
           style={[styles.inputStyle, styles.sectionEnd]}
         />
 
