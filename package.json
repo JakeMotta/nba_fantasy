@@ -1,5 +1,7 @@
 {
   "main": "node_modules/expo/AppEntry.js",
+  "author": "Jake Motta",
+  "description": "Demo application for EA. Please fix your requirements. See README.",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -21,7 +23,6 @@
     "expo-constants": "~12.1.3",
     "@expo/vector-icons": "^12.0.0",
     "react-native-paper": "4.9.2",
-    "react-native-swipe-gestures": "1.0.5",
     "react-native-select-dropdown": "1.7.0"
   },
   "devDependencies": {
