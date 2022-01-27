@@ -1,6 +1,5 @@
-import * as React from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import React from 'react';
+import { Text, View, StyleSheet } from 'react-native';
 
 export default function SectionTitle({title, rightElem}) {
   return (

@@ -1,12 +1,14 @@
-import * as React from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
 
-export default function IconButton({icon, text, onPress, buttonStyle}) {
+let disabledText = "rgba(255,255,255, .5)";
+
+export default function IconButton({icon, text, onPress, buttonStyle, disabled}) {
   return (
-    <TouchableOpacity style={[styles.buttonWithIcon, buttonStyle]} onPress={onPress}>
-      <FontAwesome name={icon} size={24} color="black" style={styles.icon} />
-      <Text style={styles.text}>{text}</Text>
+    <TouchableOpacity disabled={disabled} style={[styles.buttonWithIcon, buttonStyle, disabled && styles.disabledWrapper]} onPress={onPress}>
+      <FontAwesome name={icon} size={24} color={disabled ? disabledText : "black"} style={styles.icon} />
+      <Text style={[styles.text, disabled && styles.disabledText]}>{text}</Text>
     </TouchableOpacity>
   );
 }
@@ -23,10 +25,18 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderWidth: 1,
   },
+  disabledWrapper: {
+    backgroundColor: "rgba(0,0,0, .15)",
+    borderColor: "rgba(0,0,0, .15)"
+  },
+  disabledText: {
+    color: disabledText,
+  },
   icon: {
     marginRight: 10
   },
   text: {
     fontSize: 18,
+    color: "black"
   }
 });

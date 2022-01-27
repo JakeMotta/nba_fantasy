@@ -1,40 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Image, FlatList, ScrollView } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import IconButton from "./IconButton";
-import { TextInput } from "react-native-paper";
+import React from 'react';
+import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { get } from "lodash";
-import players from "../assets/players.json";
-import axios from "axios";
+import { FontAwesome } from '@expo/vector-icons'; 
 
-export default function PlayerCard({player}) {
-  
-  const [teamCity, setTeamCity] = useState("");
-  const [teamName, setTeamName] = useState("");
-  const [playerImage, setPlayerImage] = useState("");
-  
-
-  useEffect(() => {
-    fetchPlayerProfileImage(get(player, "personId", ""));
-  }, []);
-
-  const fetchPlayerProfileImage = async (personId) => {
-    let query = {
-      method: "get",
-      url: `https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${personId}.png`,
-      headers: {}
-    }
-
-    axios(query).then(res => {
-      console.log("hit res: ", res);
-      if(res) setPlayerImage(res);
-    }).catch(err => console.log(err))
-  }
-
+export default function PlayerCard({player, type, onPress}) {
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.removeContainer} onPress={() => onPress(get(player, "personId", ""))}>
+        <FontAwesome name={type === "myRoster" ? "minus-circle" : "plus-circle"} size={32} color="black" style={styles.icon} />
+      </TouchableOpacity>
       <Image source={{uri: `https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${get(player, "personId", "")}.png`}} style={styles.playerImage} />
-      <Text style={styles.title}>{get(player, "firstName", "").concat(" ").concat(get(player, "lastName", ""))}</Text>
+      <Text style={styles.title} numberOfLines={2} lineBreakMode="tail">{get(player, "firstName", "").concat(" ").concat(get(player, "lastName", ""))}</Text>
       <Text style={styles.subtitle}>{get(player, "teamSitesOnly.posFull", "")}</Text>
       <Text style={styles.subtitle}>Create Team</Text>
       <Text style={styles.subtitle}>Create Team</Text>
@@ -51,7 +27,12 @@ const styles = StyleSheet.create({
     marginRight: 15,
     flexDirection: "column",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    width: 225,
+  },
+  removeContainer: {
+    width: "100%",
+    alignItems: "flex-end"
   },
   playerImage: {
     width: 100,
@@ -61,7 +42,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    textAlign: "center"
   },
   subtitle: {
     fontSize: 16
