@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, View, StyleSheet, FlatList, ScrollView } from 'react-native';
 import { TextInput } from "react-native-paper";
 import SectionTitle from "./SectionTitle";
@@ -7,13 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import PlayerCard from "./PlayerCard";
 import IconButton from "./IconButton";
 
-export default function CreateTeam({availableRoster, myRoster, gamePositions, addPlayerToRoster, removePlayerFromRoster, saveTeam}) {
-  
-  const [teamCity, setTeamCity] = useState("");
-  const [teamName, setTeamName] = useState("");
-  const [showFilter, setShowFilter] = useState(false);
-  const [filter, setFilter] = useState("");
-
+export default function CreateTeam({myRoster, filteredPlayers, teamCity, teamName, gamePositions, changeText, setFilter, addPlayerToRoster, removePlayerFromRoster, saveTeam}) {
   return (
     <View style={styles.container}>
       <SectionTitle title={"Create Team"} />
@@ -23,13 +17,13 @@ export default function CreateTeam({availableRoster, myRoster, gamePositions, ad
         <TextInput 
           label={"Team City"}
           value={teamCity}
-          onChangeText={teamCity => setTeamCity(teamCity)}
+          onChangeText={value => changeText(value, "teamCity")}
           style={styles.inputStyle}
         />
         <TextInput 
           label={"Team Name"}
           value={teamName}
-          onChangeText={teamName => setTeamName(teamName)}
+          onChangeText={value => changeText(value, "teamName")}
           style={[styles.inputStyle, styles.sectionEnd]}
         />
 
@@ -55,16 +49,17 @@ export default function CreateTeam({availableRoster, myRoster, gamePositions, ad
               data={gamePositions}
               defaultButtonText={"Filter"}
               renderDropdownIcon={() => <FontAwesome name={"filter"} size={24} color="black" />}
-              onSelect={selectedItem => setFilter(selectedItem)}
-              buttonTextAfterSelection={(selectedItem, index) => selectedItem}
-              rowTextForSelection={(item, index) => item}
+              onSelect={filter => setFilter(filter)}
+              buttonTextAfterSelection={selectedItem => selectedItem}
+              rowTextForSelection={item => item}
+              buttonStyle={{backgroundColor: "transparent"}}
               buttonTextStyle={styles.dropDownText}
             />
           }
         />
 
         <FlatList
-          data={availableRoster}
+          data={filteredPlayers}
           renderItem={item => (<PlayerCard player={item?.item} key={item?.item?.personId} type={"availableRoster"} onPress={addPlayerToRoster} />)}
           keyExtractor={item => item?.personId}
           horizontal={true}
@@ -81,8 +76,8 @@ export default function CreateTeam({availableRoster, myRoster, gamePositions, ad
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 10,
-    flex: 1
+    flex: 1,
+    padding: 15
   },
   title: {
     fontSize: 18,
@@ -93,7 +88,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   inputStyle: {
-    // borderRadius: 25
     marginBottom: 15,
   },
   dropDownText: {

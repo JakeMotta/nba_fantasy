@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import { View, StyleSheet } from 'react-native';
-import GestureRecognizer from 'react-native-swipe-gestures';
 import MyTeam from "../components/MyTeams";
 import CreateTeam from "../components/CreateTeam";
-import { get } from "lodash";
+import { get, isEqual } from "lodash";
 import players from "../assets/players.json";
 import { BottomNavigation } from 'react-native-paper';
 
@@ -21,8 +20,11 @@ class MainScreen extends Component {
       availableRoster: [],
       myRoster: [],
       allPlayersMap: {},
-      gamePositions: ["point guard", "shooting guard", "power forward", "small forward", "center", "point forward", "forward", "forward-center", "guard"],
-      gamePositionsMap: {}
+      gamePositionsMap: {},
+      teamName: "",
+      teamCity: "",
+      filter: "",
+      filteredPlayers: [],
     };
   }
 
@@ -32,21 +34,39 @@ class MainScreen extends Component {
     
     let allPlayersMap = {};
     let availableRoster = [];
-    let gamePositionsMap = {};
+    let gamePositionsMap = {
+      "None": true,
+    };
 
     leagueTeams.forEach(team => {
       league[team].forEach(player => {
         if(!allPlayersMap[get(player, "personId", "")]) {
           allPlayersMap[get(player, "personId", "")] = player;
           availableRoster.push(player);
-          gamePositionsMap[get(player, "teamSitesOnly.posFull", "")] = true;
+
+          let position = get(player, "teamSitesOnly.posFull", "");
+          if(position) gamePositionsMap[position] = true;
         }
       })
     });
 
-    this.setState({ allPlayersMap, availableRoster, gamePositionsMap }, () => {
-      console.log("mount state: ", this.state)
-    });
+    this.setState({ allPlayersMap, availableRoster, gamePositionsMap, filteredPlayers: availableRoster });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(!isEqual(get(this.state, "availableRoster", {}), get(prevState, "availableRoster"), {}) || !isEqual(get(this.state, "filter", {}), get(prevState, "filter"), {})) {
+      const { availableRoster, filter } = this.state;
+      console.log("hit filter update")
+      let filteredPlayers = [];
+  
+      if(filter && filter !== "None") {
+        availableRoster.forEach(player => {
+          if(get(player, "teamSitesOnly.posFull", "") === filter) filteredPlayers.push(player);
+        })
+      } else filteredPlayers = availableRoster;
+
+      this.setState({ filteredPlayers });
+    }
   }
 
   saveTeam = (team) => {
@@ -57,7 +77,6 @@ class MainScreen extends Component {
   }
 
   addPlayerToRoster = (personId) => {
-    console.log("hit player: ", personId)
     const { allPlayersMap } = this.state;
     let availableRoster = [...this.state.availableRoster];
     let myRoster = [...this.state.myRoster];
@@ -65,49 +84,48 @@ class MainScreen extends Component {
     for(let i = 0; i < availableRoster.length; i++) {
       if(get(availableRoster[i], "personId", "") === personId) {
         availableRoster.splice(i, 1);
+        console.log("hit splice")
         break;
       } 
     }
 
     myRoster.push(allPlayersMap[personId]);
 
-    this.setState({ myRoster, availableRoster }, () => {
-      console.log("hit: ", this.state)
-    });
+    this.setState({ myRoster, availableRoster });
+  }
+
+  removePlayerFromRoster = (personId) => {
+    const { allPlayersMap } = this.state;
+    let availableRoster = [...this.state.availableRoster];
+    let myRoster = [...this.state.myRoster];
+
+    for(let i = 0; i < myRoster.length; i++) {
+      if(get(myRoster[i], "personId", "") === personId) {
+        myRoster.splice(i, 1);
+        break;
+      } 
+    }
+
+    availableRoster.push(allPlayersMap[personId]);
+
+    this.setState({ myRoster, availableRoster });
   }
  
   render() {
-    const { activeScreen, myTeams, availableRoster, myRoster, gamePositions } = this.state;
+    const { activeScreen, myTeams, availableRoster, myRoster, filter, filteredPlayers, teamCity, teamName, gamePositionsMap } = this.state;
 
-    const config = {
-      velocityThreshold: 0.3,
-      directionalOffsetThreshold: 80
-    };
- 
     return (
-      // <GestureRecognizer
-      //   onSwipeLeft={() => this.setState({activeScreen: screens.create})}
-      //   onSwipeRight={() => this.setState({activeScreen: screens.myTeam})}
-      //   config={config}
-      //   style={styles.gestureWrapper}
-      //   >
-      //   <View style={styles.contentWrapper}>
-      //   { activeScreen === screens.create ? <CreateTeam availableRoster={availableRoster} myRoster={myRoster} gamePositions={gamePositions} addPlayerToRoster={this.addPlayerToRoster} saveTeam={this.saveTeam} /> : <MyTeam teams={myTeams} onCreateTeam={() => this.setState({activeScreen: screens.create})} /> }
-      //   </View>
-      // </GestureRecognizer>
-
-      <View style={styles.contentWrapper}>      
-        <BottomNavigation
-          navigationState={{ index: activeScreen, routes }}
-          onIndexChange={activeScreen => this.setState({activeScreen})}
-          renderScene={
-            BottomNavigation.SceneMap({
-              myTeams: () => MyTeam({teams: myTeams, onCreateTeam: () => this.setState({activeScreen: 1})}),
-              create: () => CreateTeam({availableRoster, myRoster, gamePositions, addPlayerToRoster: this.addPlayerToRoster, saveTeam: this.saveTeam}),
-            })
-          }
-          />
-      </View>
+      <BottomNavigation
+      navigationState={{ index: activeScreen, routes }}
+      onIndexChange={activeScreen => this.setState({activeScreen})}
+      renderScene={
+        BottomNavigation.SceneMap({
+          myTeams: () => MyTeam({teams: myTeams, onCreateTeam: () => this.setState({activeScreen: 1})}),
+          create: () => CreateTeam({availableRoster, myRoster, filter, filteredPlayers, teamCity, teamName, gamePositions: Object.keys(gamePositionsMap), changeText: (text, type) => this.setState({[type]: text}), setFilter: (filter) => this.setState({filter}), addPlayerToRoster: this.addPlayerToRoster, removePlayerFromRoster: this.removePlayerFromRoster, saveTeam: this.saveTeam}),
+        })
+      }
+      style={styles.contentWrapper}
+      />
     );
   }
 }
@@ -115,9 +133,6 @@ class MainScreen extends Component {
 export default MainScreen;
 
 const styles = StyleSheet.create({
-  gestureWrapper: {
-    flex: 1,
-  },
   contentWrapper: {
     flex: 1,
   }

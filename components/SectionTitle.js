@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "transparent",
     justifyContent: "space-between",
-    marginBottom: 15,
+    marginBottom: 10,
   },
   title: {
     fontSize: 18,

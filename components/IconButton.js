@@ -7,7 +7,7 @@ let disabledText = "rgba(255,255,255, .5)";
 export default function IconButton({icon, text, onPress, buttonStyle, disabled}) {
   return (
     <TouchableOpacity disabled={disabled} style={[styles.buttonWithIcon, buttonStyle, disabled && styles.disabledWrapper]} onPress={onPress}>
-      <FontAwesome name={icon} size={24} color={disabled ? disabledText : "black"} style={styles.icon} />
+      <FontAwesome name={icon} size={24} color={disabled ? disabledText : "#6200ee"} style={styles.icon} />
       <Text style={[styles.text, disabled && styles.disabledText]}>{text}</Text>
     </TouchableOpacity>
   );
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 8,
     backgroundColor: "white",
-    borderColor: "gray",
+    borderColor: "#6200ee",
     borderWidth: 1,
   },
   disabledWrapper: {
@@ -37,6 +37,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: "black"
+    color: "#6200ee"
   }
 });

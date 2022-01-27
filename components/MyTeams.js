@@ -29,8 +29,8 @@ export default function MyTeams({teams, onCreateTeam}) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 10,
     flex: 1,
+    padding: 15
   },
   scrollViewWrapper: {
     marginVertical: 5,

@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     borderRadius: 20,
-    borderColor: "gray",
+    borderColor: "#6200ee",
+    borderWidth: 1,
     padding: 15,
     marginRight: 15,
     flexDirection: "column",
